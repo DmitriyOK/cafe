@@ -10,4 +10,8 @@ public abstract class SweetAddition extends Addition {
         super(sweetAdditionName, sweetAdditionPrice);
         this.sugarLevel = sugarLevel;
     }
+
+    public int getSugarLevel() {
+        return sugarLevel;
+    }
 }

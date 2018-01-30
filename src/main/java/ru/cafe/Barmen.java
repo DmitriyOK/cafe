@@ -23,11 +23,11 @@ public class Barmen {
         this.menu = menu;
     }
 
-    public Order takeOrder() throws IOException {
+    public Order takeOrder() throws IOException { //TODO поддержать возможность заказа нескольких напитков.
         int currentOrderId;
         Set<Drink> result = new HashSet<Drink>();
         synchronized (this) {
-            currentOrderId = orderId++;
+            currentOrderId = ++orderId;
         }
 
         Drink selectedDrink = takeDrinkOrder();
@@ -54,16 +54,15 @@ public class Barmen {
 
     private int selectDrinkBatchSize() throws IOException {
         BufferedReader clientChoiceReader = new BufferedReader(new InputStreamReader(System.in));
-        int drinkBatchSize;
+        int drinkBatchSizeId;
         System.out.println("Выберите объем напитка, мг");
         printAvailableDrinkBatchSize();
-        while (!validatior.validateDrinkBatchSize(drinkBatchSize = Integer.parseInt(clientChoiceReader.readLine()))) {
+        while (!validatior.validateDrinkBatchSize(drinkBatchSizeId = Integer.parseInt(clientChoiceReader.readLine()))) {
             System.out.println("Выберите объем из предложенных вариантов: ");
             printAvailableDrinkBatchSize();
         }
-        return drinkBatchSize;
+        return validatior.getAvailableDrinksBatchSize().get(drinkBatchSizeId); //TODO не совсем нравится, что за присваивание размера порции отвечает валидатор. Подумать как исправить.
     }
-
 
     private void printAvailableDrinkBatchSize() {
         List<Integer> availableDrinksBatchSize = validatior.getAvailableDrinksBatchSize();

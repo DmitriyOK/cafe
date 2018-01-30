@@ -29,6 +29,10 @@ public abstract class Drink {
         return bathSize;
     }
 
+    public void setBathSize(int bathSize) {
+        this.bathSize = bathSize;
+    }
+
     public String getMetricShortName() {
         return metricShortName;
     }
@@ -45,7 +49,5 @@ public abstract class Drink {
         return this;
     }
 
-    public void setBathSize(int bathSize) {
-        this.bathSize = bathSize;
-    }
+
 }
