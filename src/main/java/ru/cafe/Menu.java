@@ -8,95 +8,82 @@ import ru.cafe.additions.other.OtherAddition;
 import ru.cafe.additions.sweet.Mead;
 import ru.cafe.additions.sweet.Sugar;
 import ru.cafe.additions.sweet.SweetAddition;
+import ru.cafe.drinks.Drink;
 import ru.cafe.drinks.coffee.BlackСoffee;
-import ru.cafe.drinks.coffee.Coffee;
 import ru.cafe.drinks.coffee.Espresso;
 import ru.cafe.drinks.coffee.Latte;
 import ru.cafe.drinks.tea.BlackTea;
 import ru.cafe.drinks.tea.GreenTea;
-import ru.cafe.drinks.tea.Tea;
 import ru.cafe.drinks.tea.WhiteTea;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Menu {
 
-    private Map<Integer, Tea> teas;
-    private Map<Integer, Coffee> coffees;
-    private Map<Integer, SweetAddition> sweetAdditions;
-    private Map<Integer, MilkAddition>  milkAdditions;
-    private Map<Integer, OtherAddition> otherAdditions;
+    private List<Drink> drinks;
+    private List<SweetAddition> sweetAdditions;
+    private List<MilkAddition>  milkAdditions;
+    private List<OtherAddition> otherAdditions;
 
     public Menu() {
-        createTeaMenu();
-        createCoffeeMenu();
+        createDrinkMenu();
         createMilkAdditionsMenu();
         createSweetAdditionsMenu();
         createOtherAdditionsMenu();
     }
 
-    private void createTeaMenu(){
-        teas = new LinkedHashMap<Integer, Tea>();
+    private void createDrinkMenu(){
+        drinks = new ArrayList<Drink>();
+
         WhiteTea whiteTea = new WhiteTea(55.0);
         GreenTea greenTea = new GreenTea(50.0);
         BlackTea blackTea = new BlackTea(60.0);
-        teas.put(1, whiteTea);
-        teas.put(2, greenTea);
-        teas.put(3, blackTea);
-    }
-
-    private void createCoffeeMenu(){
-        coffees = new LinkedHashMap<Integer, Coffee>();
         Espresso espresso = new Espresso(120.0);
         BlackСoffee blackСoffee = new BlackСoffee(100.0);
         Latte latte = new Latte(150.0);
-        coffees.put(1, blackСoffee);
-        coffees.put(2, latte);
-        coffees.put(3, espresso);
+        drinks.add(whiteTea);
+        drinks.add(greenTea);
+        drinks.add(blackTea);
+        drinks.add(blackСoffee);
+        drinks.add(latte);
+        drinks.add(espresso);
     }
 
     private void createMilkAdditionsMenu(){
-        milkAdditions = new LinkedHashMap<Integer, MilkAddition>();
+        milkAdditions = new ArrayList<MilkAddition>(4);
         Milk milk = new Milk(3.1,30);
         MilkCream milkCream = new MilkCream(20.0,50);
-        milkAdditions.put(1, milk);
-        milkAdditions.put(2, milkCream);
+        milkAdditions.add(milk);
+        milkAdditions.add(milkCream);
     }
 
     private void createSweetAdditionsMenu(){
-        sweetAdditions = new LinkedHashMap<Integer, SweetAddition>();
-        Sugar sugar = new Sugar(10);
-        Mead mead = new Mead(20);
-        sweetAdditions.put(1, sugar);
-        sweetAdditions.put(2, mead);
+        sweetAdditions =new ArrayList<SweetAddition>(4);
+        Sugar sugar = new Sugar(10, 1);
+        Mead mead = new Mead(20,1);
+        sweetAdditions.add(sugar);
+        sweetAdditions.add(mead);
     }
 
     private void createOtherAdditionsMenu(){
-        otherAdditions = new LinkedHashMap<Integer, OtherAddition>();
+        otherAdditions = new ArrayList<OtherAddition>(2);
         LemonSlice lemonSlice = new LemonSlice(30.0);
-        otherAdditions.put(1, lemonSlice);
+        otherAdditions.add(lemonSlice);
     }
 
-    public Map<Integer, Tea> getTeas() {
-        return teas;
+    public List<Drink> getDrinks() {
+        return drinks;
     }
 
-    public Map<Integer, Coffee> getCoffees() {
-        return coffees;
-    }
-
-    public Map<Integer, SweetAddition> getSweetAdditions() {
+    public List<SweetAddition> getSweetAdditions() {
         return sweetAdditions;
     }
 
-    public Map<Integer, MilkAddition> getMilkAdditions() {
+    public List<MilkAddition> getMilkAdditions() {
         return milkAdditions;
     }
 
-    public Map<Integer, OtherAddition> getOtherAdditions() {
+    public List<OtherAddition> getOtherAdditions() {
         return otherAdditions;
     }
 }

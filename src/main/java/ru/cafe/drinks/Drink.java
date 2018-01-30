@@ -37,8 +37,12 @@ public abstract class Drink {
         return drinkAdditions;
     }
 
-    public void setDrinkAdditions(Map<Addition, Integer> drinkAdditions) {
-        this.drinkAdditions = drinkAdditions;
+    public Drink setDrinkAdditions(Map<Addition, Integer> drinkAdditions) {
+        if (this.drinkAdditions == null){
+            this.drinkAdditions = drinkAdditions;
+        }
+        this.drinkAdditions.putAll(drinkAdditions);
+        return this;
     }
 
     public void setBathSize(int bathSize) {

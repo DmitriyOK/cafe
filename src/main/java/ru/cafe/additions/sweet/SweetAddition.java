@@ -4,7 +4,10 @@ import ru.cafe.additions.Addition;
 
 public abstract class SweetAddition extends Addition {
 
-    SweetAddition(String sweetAdditionName, double sweetAdditionPrice) {
+     private int sugarLevel;
+
+    SweetAddition(String sweetAdditionName, double sweetAdditionPrice, int sugarLevel) {
         super(sweetAdditionName, sweetAdditionPrice);
+        this.sugarLevel = sugarLevel;
     }
 }

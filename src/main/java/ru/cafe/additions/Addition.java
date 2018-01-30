@@ -3,19 +3,27 @@ package ru.cafe.additions;
 public abstract class Addition {
 
     private String name;
-    private double price;
+    private double pricePerUnit;
+    private double totalPrice; //TODO подумать уместна ли эта переменная здесь.
 
-    public Addition(String name, double price) {
+    public Addition(String name, double pricePerUnit) {
         this.name = name;
-        this.price = price;
+        this.pricePerUnit = pricePerUnit;
     }
 
     public String getName() {
         return name;
     }
 
-    public double getPrice() {
-        return price;
+    public double getPricePerUnit() {
+        return pricePerUnit;
     }
 
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 }
