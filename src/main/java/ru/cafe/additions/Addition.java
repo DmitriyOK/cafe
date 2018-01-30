@@ -2,20 +2,20 @@ package ru.cafe.additions;
 
 public abstract class Addition {
 
-    private String additionName;
-    private double additionPricePerUnit;
+    private String name;
+    private double price;
 
-    public Addition(String additionName, double additionPricePerUnit) {
-        this.additionName = additionName;
-        this.additionPricePerUnit = additionPricePerUnit;
+    public Addition(String name, double price) {
+        this.name = name;
+        this.price = price;
     }
 
-    public String getAdditionName() {
-        return additionName;
+    public String getName() {
+        return name;
     }
 
-    public double getAdditionPricePerUnit() {
-        return additionPricePerUnit;
+    public double getPrice() {
+        return price;
     }
 
 }
