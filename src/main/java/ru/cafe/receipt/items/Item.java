@@ -1,5 +1,10 @@
 package ru.cafe.receipt.items;
 
+
+/**
+ * Класс DTO - используется для передачи информации из заказа клиента в чек.
+ */
+
 public abstract class Item {
 
     private String fullName;

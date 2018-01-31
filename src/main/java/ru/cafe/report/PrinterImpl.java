@@ -1,10 +1,5 @@
 package ru.cafe.report;
 
-import ru.cafe.additions.Addition;
-import ru.cafe.additions.milks.MilkAddition;
-import ru.cafe.additions.sweet.SweetAddition;
-import ru.cafe.drinks.Drink;
-import ru.cafe.order.Order;
 import ru.cafe.receipt.Receipt;
 import ru.cafe.receipt.items.AdditionItem;
 import ru.cafe.receipt.items.BatchUnit;
@@ -18,9 +13,9 @@ public class PrinterImpl implements Printer {
         for (BatchUnit batchUnit : receipt.getOrderedItems()) {
             DrinkItem drinkItem = batchUnit.getDrinkItem();
             System.out.println("Напиток: "+drinkItem.getFullName());
-            System.out.println(drinkItem.getShortName() +" "+" "+drinkItem.getCount()+" "+drinkItem.getPrice());
+            System.out.println(drinkItem);
             for (AdditionItem additionItem : batchUnit.getAdditionItems()) {
-                System.out.println(additionItem.getFullName()+" "+additionItem.getCount()+" "+additionItem.getPrice());
+                System.out.println(additionItem);
             }
         }
         System.out.println("Итого к оплате: "+receipt.getReceiptPrice());

@@ -13,8 +13,22 @@ import ru.cafe.receipt.items.DrinkItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Фабрика создает объект Позицию {@link ru.cafe.receipt.items.BatchUnit}
+ * небходимый для печати чека клиента.
+ *
+ * Здесь же создается полное имя напитка по шаблону "чай черный 200 мг с молоком 1.5% и сахаром 3"
+ *  и имена дополнений с учетом особенностей, например "Молоко 3,1%".
+ *
+ */
 public class BatchUnitFactory {
 
+    /**
+     * Создает Позицию. Определяет имена коротких и полных наименований для отображения в чеке.
+     *
+     * @param order - заказ клиента, для печати чека
+     * @return {@link ru.cafe.receipt.items.BatchUnit} - информация о заказе
+     */
     public List<BatchUnit> getInstance(Order order) {
         List<BatchUnit> result= new ArrayList<>();
         List<AdditionItem> additionItems;

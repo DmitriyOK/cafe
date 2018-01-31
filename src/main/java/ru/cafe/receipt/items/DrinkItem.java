@@ -1,6 +1,10 @@
 package ru.cafe.receipt.items;
 
-public class DrinkItem extends Item{
+/**
+ * DTO класса {@link ru.cafe.drinks.Drink}
+ */
+public class DrinkItem extends Item {
+
     private String shortName;
 
     public DrinkItem(String fullName, String shortName, double price) {
@@ -11,5 +15,10 @@ public class DrinkItem extends Item{
 
     public String getShortName() {
         return shortName;
+    }
+
+    @Override
+    public String toString() {
+        return getShortName() +" "+" "+getCount()+" "+getPrice();
     }
 }

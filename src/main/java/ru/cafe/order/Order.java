@@ -7,7 +7,6 @@ import java.util.List;
 public class Order {
 
     private long id;
-    private boolean paid;
     private List<Drink> drinks;
 
     public Order(long id, List<Drink> drinks) {
@@ -23,11 +22,4 @@ public class Order {
         return drinks;
     }
 
-    public boolean isPaid() {
-        return paid;
-    }
-
-    public void setPaid(boolean paid) {
-        this.paid = paid;
-    }
 }

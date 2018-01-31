@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+/**
+ * Основной класс программы. Принимает заказ у клиента.
+ *  Достаточно вызвать метод {@link Barmen#takeOrder()} и следовать инструкциям.
+ * В этом же классе определены информационные сообщения по сопровождению заказа.
+ */
 public class Barmen {
 
     private Validatior validatior;
@@ -23,7 +28,14 @@ public class Barmen {
         this.menu = menu;
     }
 
-    public Order takeOrder() throws IOException { //TODO поддержать возможность заказа нескольких напитков.
+    /**
+     * Инициирует заказ. Создает в потоке заказ клиента и возвращает его.
+     *
+     * @return - заказ клиента.
+     * @throws IOException
+     */
+
+    public Order takeOrder() throws IOException { //TODO поддержать возможность заказа нескольких напитков. И завершение работы по таймауту.
         int currentOrderId;
         List<Drink> result = new ArrayList<>();
         synchronized (this) {
