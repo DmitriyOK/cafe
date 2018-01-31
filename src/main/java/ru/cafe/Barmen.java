@@ -18,8 +18,8 @@ import java.util.*;
  */
 public class Barmen {
 
-    private Validatior validatior;
     private Menu menu;
+    private Validatior validatior;
     private volatile int orderId = 0;
     private final static String TRIPLE_POSITION_PATTERN = "%s. %s, стоимость: %s";
 
@@ -35,57 +35,42 @@ public class Barmen {
      * @throws IOException
      */
 
-    public Order takeOrder() throws IOException { //TODO поддержать возможность заказа нескольких напитков. И завершение работы по таймауту.
+    public Order takeOrder() throws IOException {
         int currentOrderId;
         List<Drink> result = new ArrayList<>();
         synchronized (this) {
             currentOrderId = ++orderId;
         }
-
-        Drink selectedDrink = takeDrinkOrder();
-        selectedDrink.setBathSize(selectDrinkBatchSize());
-        selectedDrink.setDrinkAdditions(takeAdditionOrder(menu.getMilkAdditions()))
-                     .setDrinkAdditions(takeAdditionOrder(menu.getSweetAdditions()))
-                     .setDrinkAdditions(takeAdditionOrder(menu.getOtherAdditions()));
-        result.add(selectedDrink);
+        int drinksCount = printAndGetDrinksCount();
+        if (drinksCount <=0){
+            System.exit(0);
+        }
+        for (int i = 0; i < drinksCount; i++) {
+            Drink selectedDrink = takeDrinkOrder();
+            selectedDrink.setBathSize(selectDrinkBatchSize());
+            selectedDrink.setDrinkAdditions(takeAdditionOrder(menu.getMilkAdditions()))
+                    .setDrinkAdditions(takeAdditionOrder(menu.getSweetAdditions()))
+                    .setDrinkAdditions(takeAdditionOrder(menu.getOtherAdditions()));
+            result.add(selectedDrink);
+        }
         return new Order(currentOrderId, result);
     }
-
 
     private Drink takeDrinkOrder() throws IOException {
         BufferedReader clientChoiceReader = new BufferedReader(new InputStreamReader(System.in));
         List<Drink> drinks = menu.getDrinks();
-        System.out.println("Выберите напиток: ");
-        for (int drinkPosition = 0; drinkPosition < drinks.size(); drinkPosition++) {
-            Drink drink = drinks.get(drinkPosition);
-            System.out.println(String.format(TRIPLE_POSITION_PATTERN, drinkPosition, drink.getName(), drink.getPrice()));
+        int selectedDrink;
+
+        printAvailableDrinks(drinks);
+        while (!validatior.validateClientChoice(selectedDrink = Integer.parseInt(clientChoiceReader.readLine()), drinks.size())){
+            printAvailableDrinks(drinks);
         }
-        int selectedDrink = Integer.parseInt(clientChoiceReader.readLine());
+
         return menu.getDrinks().get(selectedDrink);
     }
 
-    private int selectDrinkBatchSize() throws IOException {
-        BufferedReader clientChoiceReader = new BufferedReader(new InputStreamReader(System.in));
-        int drinkBatchSizeId;
-        System.out.println("Выберите объем напитка, мг");
-        printAvailableDrinkBatchSize();
-        while (!validatior.validateDrinkBatchSize(drinkBatchSizeId = Integer.parseInt(clientChoiceReader.readLine()))) {
-            System.out.println("Выберите объем из предложенных вариантов: ");
-            printAvailableDrinkBatchSize();
-        }
-        return validatior.getAvailableDrinksBatchSize().get(drinkBatchSizeId); //TODO не совсем нравится, что за присваивание размера порции отвечает валидатор. Подумать как исправить.
-    }
-
-    private void printAvailableDrinkBatchSize() {
-        List<Integer> availableDrinksBatchSize = validatior.getAvailableDrinksBatchSize();
-        for (int batchSizePosition = 0; batchSizePosition < availableDrinksBatchSize.size(); batchSizePosition++) {
-            Integer batchSizeValue = availableDrinksBatchSize.get(batchSizePosition);
-            System.out.println(String.format("%s. %s", batchSizePosition, batchSizeValue));
-        }
-    }
-
     private List<Addition> takeAdditionOrder(List<? extends Addition> additions) throws IOException {
-        List<Addition> result = new ArrayList<Addition>();
+        List<Addition> result = new ArrayList<>();
         int selectedAdditionId = selectDrinksAddition(additions);
         if (selectedAdditionId == -1) {
             return result;
@@ -99,25 +84,69 @@ public class Barmen {
         result.add(additions.get(selectedAdditionId));
         return result;
     }
+    private int selectDrinkBatchSize() throws IOException {
+        BufferedReader clientChoiceReader = new BufferedReader(new InputStreamReader(System.in));
+        int drinkBatchSizeId;
+        printAvailableDrinkBatchSize();
+        while (!validatior.validateClientChoice(drinkBatchSizeId = Integer.parseInt(clientChoiceReader.readLine()), validatior.getAvailableDrinksBatchSize().size())) {
+            printAvailableDrinkBatchSize();
+        }
+        return validatior.getAvailableDrinksBatchSize().get(drinkBatchSizeId); //TODO не совсем нравится, что за присваивание размера порции отвечает валидатор. Подумать как исправить.
+    }
 
     private int selectDrinksAddition(List<? extends Addition> additions) throws IOException {
         BufferedReader clientChoiceReader = new BufferedReader(new InputStreamReader(System.in));
+        int clientChoice;
+        printDrinkAdditions(additions);
+        while (!validatior.validateClientChoice(clientChoice = Integer.parseInt(clientChoiceReader.readLine()), additions.size() )) {
+           printDrinkAdditions(additions);
+        }
+        return clientChoice;
+    }
+
+    private int selectSugarLevel() throws IOException {
+        BufferedReader clientChoiceReader = new BufferedReader(new InputStreamReader(System.in));
+        int sugarLevel;
+        printSugarMessageChoice();
+        while (!validatior.validateSugarBatchSize(sugarLevel = Integer.parseInt(clientChoiceReader.readLine()))) {
+            printSugarMessageChoice();
+        }
+        return sugarLevel;
+    }
+
+    private int printAndGetDrinksCount() throws IOException {
+        BufferedReader clientChoiceReader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Выберите количество напитков. Для отказа введите -1");
+        return Integer.parseInt(clientChoiceReader.readLine());
+    }
+
+    private void printAvailableDrinks(List<Drink> drinks){
+        System.out.println("Выберите напиток: ");
+        for (int drinkPosition = 0; drinkPosition < drinks.size(); drinkPosition++) {
+            Drink drink = drinks.get(drinkPosition);
+            System.out.println(String.format(TRIPLE_POSITION_PATTERN, drinkPosition, drink.getName(), drink.getPrice()));
+        }
+    }
+
+    private void printAvailableDrinkBatchSize() {
+        System.out.println("Выберите объем напитка, мг");
+        List<Integer> availableDrinksBatchSize = validatior.getAvailableDrinksBatchSize();
+        for (int batchSizePosition = 0; batchSizePosition < availableDrinksBatchSize.size(); batchSizePosition++) {
+            Integer batchSizeValue = availableDrinksBatchSize.get(batchSizePosition);
+            System.out.println(String.format("%s. %s", batchSizePosition, batchSizeValue));
+        }
+    }
+
+    private void printSugarMessageChoice(){
+        System.out.println("Выберите уровень сахара от 1 до 10");
+    }
+
+    private void printDrinkAdditions(List<? extends Addition> additions){
         System.out.println("Выберите дополнение к напитку");
         System.out.println("Если добавка не нужна, введите -1");
         for (int additionPosition = 0; additionPosition < additions.size(); additionPosition++) {
             Addition addition = additions.get(additionPosition);
             System.out.println(String.format(TRIPLE_POSITION_PATTERN, additionPosition, addition.getName(), addition.getPrice()));
         }
-        return Integer.parseInt(clientChoiceReader.readLine());
-    }
-
-    private int selectSugarLevel() throws IOException {
-        BufferedReader clientChoiceReader = new BufferedReader(new InputStreamReader(System.in));
-        int sugarLevel;
-        System.out.println("Выберите уровень сахара от 1 до 10");
-        while (!validatior.validateSugarBatchSize(sugarLevel = Integer.parseInt(clientChoiceReader.readLine()))) {
-            System.out.println("Недопустимый уровень. Выберите уровень сахара от 1 до 10");
-        }
-        return sugarLevel;
     }
 }

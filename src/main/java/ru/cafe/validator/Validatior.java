@@ -21,10 +21,6 @@ public class Validatior {
         availableDrinksBatchSize.add(500);
     }
 
-    public boolean validateDrinkBatchSize(int drinkBatchSizeChoice){
-        return drinkBatchSizeChoice >= 0 && drinkBatchSizeChoice <= availableDrinksBatchSize.size();
-    }
-
     /**
      * Проверяет введеный уровень сахара в диапазоне от 1 до 10
      * @param sugarBatchSize - уровень сахара.
@@ -36,5 +32,9 @@ public class Validatior {
 
     public List<Integer> getAvailableDrinksBatchSize() {
         return availableDrinksBatchSize;
+    }
+
+    public boolean validateClientChoice(int clientChoice, int maxSize){
+        return clientChoice >= 0 && clientChoice <= maxSize-1;
     }
 }
