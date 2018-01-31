@@ -1,6 +1,7 @@
 package ru.cafe.report;
 
 import ru.cafe.order.Order;
+import ru.cafe.receipt.Receipt;
 
 /**
  *  Интерфейс Printer.
@@ -15,6 +16,6 @@ public interface Printer {
      *
      * @param order - заказ клиента кафе
      */
-    void print(Order order);
+    void print(Receipt order);
 
 }

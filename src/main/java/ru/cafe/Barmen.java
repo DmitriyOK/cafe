@@ -25,7 +25,7 @@ public class Barmen {
 
     public Order takeOrder() throws IOException { //TODO поддержать возможность заказа нескольких напитков.
         int currentOrderId;
-        Set<Drink> result = new HashSet<Drink>();
+        List<Drink> result = new ArrayList<>();
         synchronized (this) {
             currentOrderId = ++orderId;
         }
@@ -94,7 +94,7 @@ public class Barmen {
         System.out.println("Если добавка не нужна, введите -1");
         for (int additionPosition = 0; additionPosition < additions.size(); additionPosition++) {
             Addition addition = additions.get(additionPosition);
-            System.out.println(String.format(TRIPLE_POSITION_PATTERN, additionPosition, addition.getName(), addition.getPricePerUnit()));
+            System.out.println(String.format(TRIPLE_POSITION_PATTERN, additionPosition, addition.getName(), addition.getPrice()));
         }
         return Integer.parseInt(clientChoiceReader.readLine());
     }

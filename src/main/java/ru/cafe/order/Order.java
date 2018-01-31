@@ -2,15 +2,15 @@ package ru.cafe.order;
 
 import ru.cafe.drinks.Drink;
 
-import java.util.Set;
+import java.util.List;
 
 public class Order {
 
     private long id;
     private boolean paid;
-    private Set<Drink> drinks;
+    private List<Drink> drinks;
 
-    public Order(long id, Set<Drink> drinks) {
+    public Order(long id, List<Drink> drinks) {
         this.id = id;
         this.drinks = drinks;
     }
@@ -19,7 +19,7 @@ public class Order {
         return id;
     }
 
-    public Set<Drink> getDrinks() {
+    public List<Drink> getDrinks() {
         return drinks;
     }
 
