@@ -59,8 +59,8 @@ public class Menu {
 
     private void createSweetAdditionsMenu(){
         sweetAdditions =new ArrayList<SweetAddition>(4);
-        Sugar sugar = new Sugar(10, 1);
-        Mead mead = new Mead(20,1);
+        Sugar sugar = new Sugar(10);
+        Mead mead = new Mead(20);
         sweetAdditions.add(sugar);
         sweetAdditions.add(mead);
     }

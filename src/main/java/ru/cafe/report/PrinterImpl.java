@@ -2,14 +2,11 @@ package ru.cafe.report;
 
 import ru.cafe.additions.Addition;
 import ru.cafe.additions.milks.MilkAddition;
-import ru.cafe.additions.other.OtherAddition;
 import ru.cafe.additions.sweet.SweetAddition;
 import ru.cafe.drinks.Drink;
 import ru.cafe.order.Order;
 
-import java.util.Map;
-
-public class Receipt implements Printer {
+public class PrinterImpl implements Printer {
 
 
     public void print(Order order) {
@@ -23,29 +20,21 @@ public class Receipt implements Printer {
                     .append(drink.getMetricShortName())
                     .append(", ");
 
-            for (Map.Entry<Addition, Integer> additionsEntry : drink.getDrinkAdditions().entrySet()) {
-                Addition addition = additionsEntry.getKey();
+            for (Addition addition : drink.getDrinkAdditions()) {
+                itemName.append(addition.getName()).append(" ");
                 if (addition instanceof MilkAddition){
                     MilkAddition milkAddition = (MilkAddition) addition;
-                    itemName.append(milkAddition.getName())
-                            .append("-")
+                    itemName.append("-")
                             .append(milkAddition.getPercentFat())
                             .append("% ");
                 }
                 if (addition instanceof SweetAddition){
                     SweetAddition sweetAddition = (SweetAddition) addition;
-                    itemName.append(sweetAddition.getName())
-                            .append("-")
+                    itemName.append("-")
                             .append(sweetAddition.getSugarLevel())
                             .append(" ");
                 }
-                if (addition instanceof OtherAddition){
-                    OtherAddition otherAddition = (OtherAddition) addition;
-                    itemName.append(otherAddition.getName())
-                            .append(" ");
-                }
             }
-            itemName.trimToSize();
             System.out.println(itemName.toString());
         }
     }

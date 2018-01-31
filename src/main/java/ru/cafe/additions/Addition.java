@@ -1,10 +1,9 @@
 package ru.cafe.additions;
 
-public abstract class Addition {
+public abstract class Addition implements Cloneable {
 
     private String name;
     private double pricePerUnit;
-    private double totalPrice; //TODO подумать уместна ли эта переменная здесь.
 
     public Addition(String name, double pricePerUnit) {
         this.name = name;
@@ -17,13 +16,5 @@ public abstract class Addition {
 
     public double getPricePerUnit() {
         return pricePerUnit;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
     }
 }

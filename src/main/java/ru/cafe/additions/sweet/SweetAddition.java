@@ -6,12 +6,15 @@ public abstract class SweetAddition extends Addition {
 
      private int sugarLevel;
 
-    SweetAddition(String sweetAdditionName, double sweetAdditionPrice, int sugarLevel) {
+    SweetAddition(String sweetAdditionName, double sweetAdditionPrice) {
         super(sweetAdditionName, sweetAdditionPrice);
-        this.sugarLevel = sugarLevel;
     }
 
     public int getSugarLevel() {
         return sugarLevel;
+    }
+
+    public void setSugarLevel(int sugarLevel) {
+        this.sugarLevel = sugarLevel;
     }
 }

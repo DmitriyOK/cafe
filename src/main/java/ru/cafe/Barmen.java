@@ -33,8 +33,8 @@ public class Barmen {
         Drink selectedDrink = takeDrinkOrder();
         selectedDrink.setBathSize(selectDrinkBatchSize());
         selectedDrink.setDrinkAdditions(takeAdditionOrder(menu.getMilkAdditions()))
-                .setDrinkAdditions(takeAdditionOrder(menu.getSweetAdditions()))
-                .setDrinkAdditions(takeAdditionOrder(menu.getOtherAdditions()));
+                     .setDrinkAdditions(takeAdditionOrder(menu.getSweetAdditions()))
+                     .setDrinkAdditions(takeAdditionOrder(menu.getOtherAdditions()));
         result.add(selectedDrink);
         return new Order(currentOrderId, result);
     }
@@ -72,21 +72,23 @@ public class Barmen {
         }
     }
 
-    private Map<Addition, Integer> takeAdditionOrder(List<? extends Addition> additions) throws IOException {
-        Map<Addition, Integer> result = new HashMap<Addition, Integer>();
-        int selectedAdditionId = showAdditionMenu(additions);
-        int additionCount = 1; //количество порций дополнения (сахар, мёд: 1-10; сливки, молоко, лимон: 1)
+    private List<Addition> takeAdditionOrder(List<? extends Addition> additions) throws IOException {
+        List<Addition> result = new ArrayList<Addition>();
+        int selectedAdditionId = selectDrinksAddition(additions);
         if (selectedAdditionId == -1) {
             return result;
         }
         if (additions.get(selectedAdditionId) instanceof SweetAddition) {
-            additionCount = showSweetAdditionCount();
+            SweetAddition sweetAddition = (SweetAddition) additions.get(selectedAdditionId);
+            sweetAddition.setSugarLevel(selectSugarLevel());
+            result.add(sweetAddition);
+            return result;
         }
-        result.put(additions.get(selectedAdditionId), additionCount);
+        result.add(additions.get(selectedAdditionId));
         return result;
     }
 
-    private int showAdditionMenu(List<? extends Addition> additions) throws IOException {
+    private int selectDrinksAddition(List<? extends Addition> additions) throws IOException {
         BufferedReader clientChoiceReader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Выберите дополнение к напитку");
         System.out.println("Если добавка не нужна, введите -1");
@@ -97,7 +99,7 @@ public class Barmen {
         return Integer.parseInt(clientChoiceReader.readLine());
     }
 
-    private int showSweetAdditionCount() throws IOException {
+    private int selectSugarLevel() throws IOException {
         BufferedReader clientChoiceReader = new BufferedReader(new InputStreamReader(System.in));
         int sugarLevel;
         System.out.println("Выберите уровень сахара от 1 до 10");
