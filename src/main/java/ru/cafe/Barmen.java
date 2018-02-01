@@ -5,7 +5,6 @@ import ru.cafe.additions.sweet.SweetAddition;
 import ru.cafe.drinks.Drink;
 import ru.cafe.order.Order;
 import ru.cafe.report.Printer;
-import ru.cafe.report.PrinterImpl;
 import ru.cafe.validator.Validatior;
 
 import java.io.BufferedReader;
@@ -22,11 +21,12 @@ public class Barmen {
     private Menu menu;
     private Validatior validatior;
     private volatile int orderId = 0;
-    private Printer printer = new PrinterImpl();
+    private Printer printer;
 
-    public Barmen(Validatior validatior, Menu menu) {
+    public Barmen(Validatior validatior, Menu menu, Printer printer) {
         this.validatior = validatior;
         this.menu = menu;
+        this.printer=printer;
     }
 
     /**
@@ -48,10 +48,11 @@ public class Barmen {
         }
         for (int i = 0; i < drinksCount; i++) {
             Drink selectedDrink = takeDrinkOrder();
-            selectedDrink.setBathSize(selectDrinkBatchSize());
-            selectedDrink.setDrinkAdditions(takeAdditionOrder(menu.getMilkAdditions()))
-                    .setDrinkAdditions(takeAdditionOrder(menu.getSweetAdditions()))
-                    .setDrinkAdditions(takeAdditionOrder(menu.getOtherAdditions()));
+            int selectedDrinkBatchSize = selectDrinkBatchSize(selectedDrink);
+            selectedDrink.setBathSize(selectedDrinkBatchSize)
+                         .setDrinkAdditions(takeAdditionOrder(menu.getMilkAdditions()))
+                         .setDrinkAdditions(takeAdditionOrder(menu.getSweetAdditions()))
+                         .setDrinkAdditions(takeAdditionOrder(menu.getOtherAdditions()));
             result.add(selectedDrink);
         }
         return new Order(currentOrderId, result);
@@ -61,12 +62,10 @@ public class Barmen {
         BufferedReader clientChoiceReader = new BufferedReader(new InputStreamReader(System.in));
         List<Drink> drinks = menu.getDrinks();
         int selectedDrink;
-
         printer.printAvailableDrinks(drinks);
         while (!validatior.validateClientChoice(selectedDrink = Integer.parseInt(clientChoiceReader.readLine()), drinks.size())){
             printer. printAvailableDrinks(drinks);
         }
-
         return menu.getDrinks().get(selectedDrink);
     }
 
@@ -92,15 +91,14 @@ public class Barmen {
         return Integer.parseInt(clientChoiceReader.readLine());
     }
 
-    private int selectDrinkBatchSize() throws IOException {
+    private int selectDrinkBatchSize(Drink drink) throws IOException {
         BufferedReader clientChoiceReader = new BufferedReader(new InputStreamReader(System.in));
         int drinkBatchSizeId;
-        List<Integer> availableDrinksBatchSize = validatior.getAvailableDrinksBatchSize();
-        printer.printAvailableDrinkBatchSize(availableDrinksBatchSize);
-        while (!validatior.validateClientChoice(drinkBatchSizeId = Integer.parseInt(clientChoiceReader.readLine()), availableDrinksBatchSize.size())) {
-            printer.printAvailableDrinkBatchSize(availableDrinksBatchSize);
+         printer.printAvailableDrinkBatchSize(drink.getAvailableBatchSize());
+        while (!validatior.validateClientChoice(drinkBatchSizeId = Integer.parseInt(clientChoiceReader.readLine()), drink.getAvailableBatchSize().size())) {
+            printer.printAvailableDrinkBatchSize(drink.getAvailableBatchSize());
         }
-        return availableDrinksBatchSize.get(drinkBatchSizeId); //TODO не совсем нравится, что за присваивание размера порции отвечает валидатор. Подумать как исправить.
+        return drink.getAvailableBatchSize().get(drinkBatchSizeId);
     }
 
     private int selectDrinksAddition(List<? extends Addition> additions) throws IOException {

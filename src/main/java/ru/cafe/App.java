@@ -29,7 +29,7 @@ public class App {
         Printer printer = new PrinterImpl();
         BatchUnitFactory batchUnitFactory = new BatchUnitFactory();
         RecepitFactory recepitFactory = new RecepitFactory();
-        Barmen barmen = new Barmen(new Validatior(), new Menu());
+        Barmen barmen = new Barmen(new Validatior(), new Menu(), printer);
 
         Order order = barmen.takeOrder();
         List<BatchUnit> batchUnits = batchUnitFactory.getInstance(order);
